@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+racket --repl --eval '(enter! (file "main.rkt"))'
