@@ -3,6 +3,6 @@ revision = 3
 requires-python = ">=3.13"
 
 [[package]]
-name = "oyster-store"
+name = "ax-oyster-store"
 version = "0.1.0"
 source = { virtual = "." }

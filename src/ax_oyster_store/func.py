@@ -8,7 +8,11 @@ import tempfile
 
 DB_FIELDS = ["Date", "Start Time", "End Time", "Journey/Action", "Charge", "Credit", "Balance", "Note"]
 
-DB_FILE = "oyster.sqlite"
+DB_DIR = Path(Path.home(), "projects/oyster-store")
+
+DB_FILE = Path(DB_DIR, "oyster.sqlite")
+
+CSV_DIR = Path(DB_DIR, "csv")
 
 def get_conn():
     return sqlite3.connect(DB_FILE, autocommit=False)
@@ -94,10 +98,10 @@ def load_csv(filename):
 
     filefilename = Path(filename).name
 
-    shutil.move(filename, Path("csv", "loaded", filefilename))
+    shutil.move(filename, Path(CSV_DIR, "loaded", filefilename))
 
 def load_all_csvs():
-    for filepath in Path("csv").iterdir():
+    for filepath in CSV_DIR.iterdir():
         if filepath.is_file and filepath.suffix == ".csv":
             load_csv(filepath)
 
@@ -110,8 +114,11 @@ def db_row_to_ynab(l):
             ]
 
 def write_csv_for_ynab(
-        start_date = datetime.today().date() - timedelta(weeks=2),
-        end_date = datetime.max.date()):
+        start_date = None,
+        end_date = None):
+
+    start_date = start_date or datetime.today().date() - timedelta(weeks=2)
+    end_date = end_date or datetime.max.date()
 
     conn = get_conn()
     cur = conn.cursor()
